@@ -29,4 +29,4 @@ def webhook():
 
 if __name__ == '__main__':
     # Running on port 5000 by default
-    app.run(port=5000, debug=True)
+    app.run()
