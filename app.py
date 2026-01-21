@@ -1,32 +1,23 @@
+import os
 from flask import Flask, request, jsonify
-from datetime import datetime
-import json
 
 app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    # Capture the current time
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Print the data to the Railway logs
+    data = request.get_json(silent=True) or request.form.to_dict() or request.data.decode()
+    print(f"Received Webhook: {data}")
     
-    print(f"\n--- New Webhook Received at {now} ---")
-    
-    # 1. Log Headers
-    print("Headers:")
-    print(json.dumps(dict(request.headers), indent=2))
-    
-    # 2. Log Payload (handles JSON automatically)
-    if request.is_json:
-        payload = request.get_json()
-        print("Payload (JSON):")
-        print(json.dumps(payload, indent=2))
-    else:
-        print("Payload (Raw):")
-        print(request.data.decode('utf-8'))
+    return jsonify({"status": "received"}), 200
 
-    # Return a 200 OK response to the sender
-    return jsonify({"status": "success", "message": "Webhook received"}), 200
+# Health check (important for many cloud providers to verify the app is alive)
+@app.route('/', methods=['GET'])
+def home():
+    return "Webhook listener is active!", 200
 
 if __name__ == '__main__':
-    # Running on port 5000 by default
-    app.run()
+    # Use the PORT variable provided by Railway, or 5000 as a backup
+    port = int(os.environ.get("PORT", 5000))
+    # host='0.0.0.0' tells Flask to listen to all public traffic
+    app.run(host='0.0.0.0', port=port)
