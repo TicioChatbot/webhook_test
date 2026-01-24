@@ -18,6 +18,6 @@ def home():
 
 if __name__ == '__main__':
     # Use the PORT variable provided by Railway, or 5000 as a backup
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
     # host='0.0.0.0' tells Flask to listen to all public traffic
     app.run(host='0.0.0.0', port=port)
