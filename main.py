@@ -25,7 +25,12 @@ def webhook():
             meta_data = data['content']['meta_data']
             if isinstance(meta_data, list):
                 for item in meta_data:
-                    if isinstance(item, dict) and 'process_id' in item:
+                    # Check for [{'key': 'process_id', 'value': '123'}] format
+                    if isinstance(item, dict) and item.get('key') == 'process_id':
+                        process_id = item.get('value')
+                        break
+                    # Check for [{'process_id': '123'}] format (fallback)
+                    elif isinstance(item, dict) and 'process_id' in item:
                         process_id = item['process_id']
                         break
             elif isinstance(meta_data, dict):
