@@ -1,0 +1,16 @@
+# Virtual Environment
+Lib/
+Scripts/
+Include/
+pyvenv.cfg
+.venv
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
